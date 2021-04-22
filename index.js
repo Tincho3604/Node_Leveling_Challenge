@@ -5,8 +5,8 @@ const mysql = require("mysql2");
 const db = require("./models");
 const {Posts} = require("./models");
 
-app.get("/select", (req, res) => {
-    Posts.findAll().then((users)=> {
+app.get("/selectAllPosts", (req, res) => {
+    Posts.findAll({attributes: ['id','Título', 'Imagen', 'Categoría', 'Fecha'], order: [['FECHA', 'DESC']]}).then((users)=> {
         res.send(users);
     })
     .catch((err) => {
@@ -16,11 +16,11 @@ app.get("/select", (req, res) => {
 
 app.get("/insert", (req, res) => {
     Posts.create({
-        Título: "Bitcoins",
-        Contenido:"Economia de criptomonedas",
-        Imagen: "https://elordenmundial.com/wp-content/uploads/2021/04/bitcoin-moneda-activo-financiero-inflaccio%CC%81n.jpg",
-        Categoría:"Economia",
-        Fecha: "20/01/2015"
+        Título: "Diseños Web",
+        Contenido:"Webs",
+        Imagen: "https://image.freepik.com/vector-gratis/concepto-moderno-diseno-web-estilo-plano_23-2147933635.jpg",
+        Categoría:"Desarrollo",
+        Fecha: new Date(2019, 8, 11)
     }).catch((err) => {
         if(err){
             console.log(err)
