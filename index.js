@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const moment = require('moment');
 
 const mysql = require("mysql2");
 const db = require("./models");
@@ -27,6 +28,31 @@ app.get("/selectPostById/:id", (req, res) => {
         console.log("Error Post Not found",err);
     })
 })
+
+
+app.put("/updatePost/:id", (req, res) => {
+    const idPost = req.params.id
+    const formatedDate = moment(new Date(req.query.date)).format("YYYY-MM-DDTHH:mm:ss.SSS");
+    Posts.update(
+        {
+            Título: req.query.title,
+            Contenido: req.query.content,
+            Imagen: req.query.image,
+            Categoría: req.query.category,
+            Fecha: formatedDate,
+        },
+        {where:{id:idPost}}).then((users)=> {
+        if(users.length === 0){
+                res.send("¡Error! Post: NOT FOUND :(");
+            }else{
+            res.send("¡Post Editado con exito!")
+        }
+    })
+    .catch((err) => {
+        console.log("Error Post Not found",err);
+    })
+})
+
 
 
 app.get("/insert", (req, res) => {
