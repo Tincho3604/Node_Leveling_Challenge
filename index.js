@@ -16,7 +16,7 @@ app.get("/selectAllPosts", (req, res) => {
 
 app.get("/selectPostById/:id", (req, res) => {
     const idPost = req.params.id
-    Posts.findAll({where:{id:idPost}, order: [['FECHA', 'DESC']]}).then((users)=> {
+    Posts.findAll({where:{id:idPost}}).then((users)=> {
         if(users.length === 0){
                 res.send("¡Error! Post: NOT FOUND :(");
             }else{
