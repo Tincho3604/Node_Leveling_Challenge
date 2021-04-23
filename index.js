@@ -45,14 +45,13 @@ app.put("/updatePost/:id", (req, res) => {
         if(users.length === 0){
                 res.send("¡Error! Post: NOT FOUND :(");
             }else{
-            res.send("¡Post Editado con exito!")
+            res.send("¡Post editado con exito!")
         }
     })
     .catch((err) => {
         console.log("Error Post Not found",err);
     })
 })
-
 
 
 app.get("/insert", (req, res) => {
@@ -67,7 +66,22 @@ app.get("/insert", (req, res) => {
             console.log(err)
         }
     })
-    res.send("insert");
+    res.send("¡Post creado con exito!");
+})
+
+
+app.delete("/deletePost/:id", (req, res) => {
+    const idPost = req.params.id
+    Posts.destroy({where:{id: idPost}}).then((users)=> {
+        if(users === 0){
+            res.send("¡Error! Post: NOT FOUND :(");
+        }else{
+            res.send("¡Post borrado con exito!")
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 })
 
 
