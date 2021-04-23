@@ -6,6 +6,19 @@ const mysql = require("mysql2");
 const db = require("./models");
 const {Posts} = require("./models");
 
+
+const checkEmptyFields = value => {
+    const arrayOfObj = Object.entries(value).map((e) => ( { [e[0]]: e[1] } ))
+
+    for(let i=0; i< arrayOfObj.length; i++){
+        if(Object.values(arrayOfObj[i])[0] === ''){
+            return false
+            }
+        }
+    return true
+}
+
+
 app.get("/selectAllPosts", (req, res) => {
     Posts.findAll({attributes: ['id','Título', 'Imagen', 'Categoría', 'Fecha'], order: [['FECHA', 'DESC']]}).then((users)=> {
         res.send(users);
@@ -55,18 +68,24 @@ app.put("/updatePost/:id", (req, res) => {
 
 
 app.get("/insert", (req, res) => {
+    const formatedDate = moment(new Date(req.query.date)).format("YYYY-MM-DDTHH:mm:ss.SSS");
+
+if(checkEmptyFields(req.query)){
     Posts.create({
-        Título: "Diseños Web",
-        Contenido:"Webs",
-        Imagen: "https://image.freepik.com/vector-gratis/concepto-moderno-diseno-web-estilo-plano_23-2147933635.jpg",
-        Categoría:"Desarrollo",
-        Fecha: new Date(2019, 8, 11)
+        Título: req.query.title,
+        Contenido: req.query.content,
+        Imagen: req.query.image,
+        Categoría: req.query.category,
+        Fecha: formatedDate
     }).catch((err) => {
         if(err){
             console.log(err)
         }
     })
     res.send("¡Post creado con exito!");
+}else{
+    res.send("¡Error! Se detectaron campos vacios");
+}
 })
 
 
