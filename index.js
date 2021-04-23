@@ -115,11 +115,6 @@ app.delete("/deletePost/:id", (req, res) => {
     })
 })
 
-
-
-
-
-
 db.sequelize.sync().then((req) => {
     app.listen(4000, () => {
         console.log("Running on port 4000")
