@@ -14,6 +14,21 @@ app.get("/selectAllPosts", (req, res) => {
     })
 })
 
+app.get("/selectPostById/:id", (req, res) => {
+    const idPost = req.params.id
+    Posts.findAll({where:{id:idPost}, order: [['FECHA', 'DESC']]}).then((users)=> {
+        if(users.length === 0){
+                res.send("¡Error! Post: NOT FOUND :(");
+            }else{
+            res.send(users);
+        }
+    })
+    .catch((err) => {
+        console.log("Error Post Not found",err);
+    })
+})
+
+
 app.get("/insert", (req, res) => {
     Posts.create({
         Título: "Diseños Web",
