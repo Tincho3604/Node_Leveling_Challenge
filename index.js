@@ -18,6 +18,18 @@ const checkEmptyFields = value => {
     return true
 }
 
+const checkUrl = value => {
+    const formatos = ['png','jpg']
+    const urlArr = value.split('.')
+    
+    for(let i=0; i<= formatos.length; i++){
+        if(formatos[i] === urlArr[urlArr.length-1]){
+            return true
+        }
+    }
+    return false
+}
+
 
 app.get("/selectAllPosts", (req, res) => {
     Posts.findAll({attributes: ['id','Título', 'Imagen', 'Categoría', 'Fecha'], order: [['FECHA', 'DESC']]}).then((users)=> {
@@ -70,7 +82,7 @@ app.put("/updatePost/:id", (req, res) => {
 app.get("/insert", (req, res) => {
     const formatedDate = moment(new Date(req.query.date)).format("YYYY-MM-DDTHH:mm:ss.SSS");
 
-if(checkEmptyFields(req.query)){
+if(checkEmptyFields(req.query) && checkUrl(req.query.image)){
     Posts.create({
         Título: req.query.title,
         Contenido: req.query.content,
@@ -84,7 +96,7 @@ if(checkEmptyFields(req.query)){
     })
     res.send("¡Post creado con exito!");
 }else{
-    res.send("¡Error! Se detectaron campos vacios");
+    res.send("¡Error! Se detectaron error en los campos");
 }
 })
 
